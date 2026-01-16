@@ -3,22 +3,25 @@ const express = require('express')
 const path = require('path')
 const rootdir=require("./util/pathutil")
 const app = express(); 
+const cors = require('cors');
 
 const errorsController = require('./controller/error')
 
 const { default: mongoose } = require('mongoose');
+const todoItemRouter = require('./routes/todoItemRouter');
 
 const db_path = "mongodb+srv://root:root@sachin.08ycelm.mongodb.net/TODO?retryWrites=true&w=majority&appName=sachin" ;
 
-
+app.use(express.json())
 app.use(express.urlencoded());
-app.use(express.static(path.join(rootdir,"public")));
+app.use(cors());
+
+app.use('/api/todo',todoItemRouter);
 app.get(errorsController.pageNotFound);
 
 
 
-
-const PORT = 3000;
+const PORT = 3001;
 
 mongoose.connect(db_path).then (()=>{
   console.log("connecting to mongo");
